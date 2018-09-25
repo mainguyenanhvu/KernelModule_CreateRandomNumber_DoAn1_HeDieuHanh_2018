@@ -1,0 +1,1 @@
+# KernelModule_CreateRandomNumber_DoAn1_HeDieuHanh_2018
