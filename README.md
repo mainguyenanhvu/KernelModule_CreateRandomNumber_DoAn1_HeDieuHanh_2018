@@ -65,10 +65,10 @@ maivu@ubuntu:~/Module_First$ ls -l *.ko
 Kết quả:
 ```zsh
 maivu@ubuntu:~/Module_First$ lsmod
-Module                  Size  Used by
+Module                         Size  Used by
 Module_Create_Random_Number    16384  0
-nls_utf8               16384  1
-isofs                  40960  2
+nls_utf8                       16384  1
+isofs                          40960  2
 ```
 8. Dùng lệnh "**sudo ./test**" để chạy file test "**testModule_Create_Random_Number.c**".
 Kết quả:
@@ -90,6 +90,26 @@ Sep 25 01:40:14 ubuntu kernel: [ 2051.149417] MCRN: Sent 1673601317 with 4 byte(
 Sep 25 01:40:14 ubuntu kernel: [ 2051.149486] MCRN: Device successfully closed
 Sep 25 01:40:45 ubuntu kernel: [ 2081.606580] MCRN: Goodbye from the LKM!
 ```
+### Giải thích một số hàm và lệnh được cài đặt
+#### File testModule_Create_Random_Number.c
+```c++ 
+fd = open("/dev/Module_Create_Random_Number", O_RDWR); 
+```
+- Mở device với thao tác được cho phép: đọc và ghi.
+- Nếu thất bại sẽ trả về fb < 0.
+
+```c++
+ret = read(fd, &received_Number, sizeof(received_Number));
+```
+- Đọc số trong buffer và gán vào biến received_Number.
+- Nếu không đọc được thì trả về ret < 0
+
+```c++
+error_count = copy_to_user(buffer, &randomNumber, size_of_message);
+```
+- Có cấu trúc: ( * to, *from, size). Chép số được lưu trong randomNumber với kích thước là size_of_message và lưu trong buffer.
+- Nếu thành công thì trả về 0.
+
 ### Giấy phép
 Theo GPL.
 ### Nguồn tham khảo
